@@ -1,0 +1,132 @@
+<?php
+//dico français par défaut
+$dicos = "&dicoIdsDtm[]=15&dicoIdsNgt[]=16&dicoIdsPrSt[]=14&dicoIdsCjg[]=25&dicoIdsPrCp[]=13&dicoIdsStg[]=4&dicoIdsCpt[]=34&dicoIdsCpt[]=".$this->form->getValue('idDico');
+
+//gestion des dictionnaires suivant l'oeuvre
+if($this->form->getValue('idDico')==88){
+	//dico anglais herbarius
+	$dicos = "&dicoIdsDtm[]=39&dicoIdsNgt[]=16&dicoIdsPrSt[]=14&dicoIdsCjg[]=40&dicoIdsPrCp[]=38&dicoIdsStg[]=41&dicoIdsCpt[]=42&dicoIdsCpt[]=88";
+}
+if($this->form->getValue('idDico')==86){
+	//dico espagnol herbarius
+	$dicos = "&dicoIdsDtm[]=69&dicoIdsNgt[]=16&dicoIdsPrSt[]=14&dicoIdsCjg[]=67&dicoIdsPrCp[]=70&dicoIdsStg[]=68&dicoIdsCpt[]=73&dicoIdsCpt[]=86";
+}
+if($this->form->getValue('idDico')==93 || $this->form->getValue('idDico')==94 || $this->form->getValue('idDico')==82 || $this->form->getValue('idDico')==96 || $this->form->getValue('idDico')==99){
+	//dico capture
+	$dicos = "&dicoIdsDtm[]=46&dicoIdsNgt[]=16&dicoIdsPrSt[]=14&dicoIdsCjg[]=44&dicoIdsPrCp[]=13&dicoIdsStg[]=4&dicoIdsCpt[]=34&dicoIdsCpt[]=".$this->form->getValue('idDico');
+}
+?>
+<p><a href="<?php echo $this->url(array('controller'=>'index','action'=>'ajouter', 'type'=>$this->types['enfant']));?>"><?php echo $this->libAjout; ?></a>
+<?php if($this->types['parent']=="concept"):?>
+<a href="<?php echo $this->url(array('controller'=>'index','action'=>'ajouter', 'type'=>'generateur'));?>">Ajouter un générateur</a>
+<?php endif; ?>
+</p>
+<table>
+    <tr>
+		<td valign="top" >
+		<?php 
+		echo $this->form ;
+		if($this->types['parent']=="verbe"){
+			echo "<input type=\"button\" onclick=\"$('#resultat').load('".WEB_ROOT_AJAX."/conjugaison/tester', {CacheForm:1
+				,id_conj:".$this->form->getValue('id_conj')."
+				,elision:".$this->form->getValue('elision')."
+				,dicoIdCjg:".$this->form->getValue('dicoIdCjg')."
+				,prefix:'".$this->form->getValue('prefix')."'});\" value=\"tester\" >";
+		}
+		if($this->types['parent']=="generateur"){
+			echo "<input type=\"button\" onclick=\"GetAjax('".WEB_ROOT_AJAX
+			."/moteur/tester?CacheForm=1".$dicos."&valeur="
+			.urlencode($this->form->getValue('valeur'))
+			."&envoyer=Tester')\" value=\"Tester\" >";
+			echo "<br/>Force le calcul : <input type=\"checkbox\" name=\"ForceCalcul\" value=\"ForceCalcul\" >";			
+		}
+		if($this->types['parent']=="concept"){
+			if($this->parent['type']=="carac"){
+				$val = urlencode("[".$this->parent['type'].$this->form->getValue('lib')."]"); 
+			}
+			if($this->parent['type']=="a" || $this->parent['type']=="m" || $this->parent['type']=="s" || $this->parent['type']=="v"){
+				$val = urlencode("[".$this->parent['type']."_".$this->form->getValue('lib')."]"); 
+			}
+			if($this->parent['type']=="dis" || $this->parent['type']=="age" || $this->parent['type']=="thl"){
+				$val = urlencode("[".$this->parent['type']."-".$this->form->getValue('lib')."]"); 
+			}
+			if($this->parent['type']=="univers"){
+				$val = urlencode($this->form->getValue('lib')); 
+			}
+			echo "<input type=\"button\" onclick=\"GetAjax('".WEB_ROOT_AJAX
+			."/moteur/tester?CacheForm=1".$dicos."&valeur="
+			.$val
+			."&envoyer=Tester')\" value=\"Tester\" >";
+			echo "<br/>Force le calcul : <input type=\"checkbox\" name=\"ForceCalcul\" value=\"ForceCalcul\" >";			
+		}
+		?>
+		</td>
+		<td style="vertical-align:top;" >
+			<div id="loadImage" ></div>
+			<div id="resultat"></div>
+			<table>
+			    <tr>
+			<?php foreach($this->cols as $col) : ?>
+			        <th><?php echo $col;?></th>
+			<?php endforeach; ?>
+			    </tr>  
+			<?php foreach($this->enfants as $enfant) : ?>
+			    <tr>
+				<?php foreach($this->cols as $col) : ?>
+			        <td><?php echo $this->escape($enfant[$col]);?></td>
+				<?php endforeach; ?>
+			        <td>
+			            <a href="<?php echo $this->url(array('controller'=>'index',
+			                'action'=>'modifier', 'idParent'=>$this->idParent, 'type'=>$this->types['enfant'], 'id'=>$enfant[$this->key[1]]));?>">Modifier</a>
+			            <a href="<?php echo $this->url(array('controller'=>'index',
+			                'action'=>'supprimer', 'idParent'=>$this->idParent, 'type'=>$this->types['enfant'], 'id'=>$enfant[$this->key[1]]));?>">Supprimer</a>
+			        </td>
+			    </tr>
+			<?php endforeach; ?>
+
+			    <tr>
+			<?php foreach($this->cols1 as $col) : ?>
+			        <th><?php echo $col;?></th>
+			<?php endforeach; ?>
+			    </tr>  
+			<?php foreach($this->enfants1 as $enfant) : ?>
+			    <tr>
+				<?php foreach($this->cols1 as $col) : ?>
+			        <td><?php echo $this->escape($enfant[$col]);?></td>
+				<?php endforeach; ?>
+			        <td>
+			            <a href="<?php echo $this->url(array('controller'=>'index',
+			                'action'=>'modifier', 'idParent'=>$this->idParent, 'type'=>$this->types['enfant1'], 'id'=>$enfant1[$this->key[1]]));?>">Modifier</a>
+			            <a href="<?php echo $this->url(array('controller'=>'index',
+			                'action'=>'supprimer', 'idParent'=>$this->idParent, 'type'=>$this->types['enfant1'], 'id'=>$enfant1[$this->key[1]]));?>">Supprimer</a>
+			        </td>
+			    </tr>
+			<?php endforeach; ?>
+
+
+			</table>
+		</td>
+		<td style="vertical-align:top;" >
+			<?php if($this->types['parent']=="concept"):?>
+			<table>
+			    <tr>
+			        <th>id_gen</th>
+			        <th>valeur</th>
+			    </tr>  
+			<?php foreach($this->gens as $gen) : ?>
+			    <tr>
+			        <td><?php echo $this->escape($gen['id_gen']);?></td>
+			        <td><?php echo $this->escape($gen['valeur']);?></td>
+			        <td>
+			            <a href="<?php echo $this->url(array('controller'=>'index',
+			                'action'=>'modifier', 'idParent'=>$this->idParent, 'type'=>'generateur', 'id'=>$gen['id_gen']));?>">Modifier</a>
+			            <a href="<?php echo $this->url(array('controller'=>'index',
+			                'action'=>'supprimer', 'idParent'=>$this->idParent, 'type'=>'generateur', 'id'=>$gen['id_gen']));?>">Supprimer</a>
+			        </td>
+			    </tr>
+				<?php endforeach; ?>
+			</table>
+		</td>
+	</tr>
+</table>
+<?php endif; ?>

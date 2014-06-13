@@ -1,0 +1,75 @@
+<?php
+$urlR="";
+$desc="";
+$form="";
+echo $this->doctype(); 
+?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<head>
+    <?php echo $this->headMeta(); ?>
+    <?php echo $this->headTitle(); ?>
+	<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/site.css'); ?>    
+	<?php echo $this->headScript()->prependFile($this->baseUrl().'/js/jquery-1.4.4.min.js'); ?>    
+	<?php echo $this->headScript()->prependFile($this->baseUrl().'/js/ihm.js'); ?>    
+</head>
+<body>
+    <div id="content">
+        <h1><?php echo $this->escape($this->title); ?></h1>        
+<?php 
+if($this->types['parent']=="dico"){
+	$urlR = $this->url(array('controller'=>'index', 'action'=>'index'),"",true);
+	$urlR = '<a href="'.$urlR.'">Retour à la liste des '.$this->types['parent'].'s</a>';
+	if($this->parent)
+		$desc = $this->types['parent'].' de '.$this->parent['type'].' : <a href="'.$this->parent['url'].'" >'.$this->parent['url'].'</a>';
+}
+if($this->types['parent']=="conjugaison"){
+	$urlR = $this->url(array('controller'=>'index', 'action'=>'modifier', 'type'=>'dico', 'id'=>$this->parent['id_dico']),"",true);
+	$urlR = '<a href="'.$urlR.'">Retour à la liste des '.$this->types['parent'].'s</a>';
+	$desc = $this->types['parent'].' : '.$this->parent['modele'].' ('.$this->parent['num'].')';
+}
+if($this->types['parent']=="terminaison"){
+	$urlR = $this->url(array('controller'=>'index', 'action'=>'modifier', 'type'=>'conjugaison', 'id'=>$this->parent['id_conj']),"",true);
+	$urlR = '<a href="'.$urlR.'">Retour à la liste des '.$this->types['parent'].'s</a>';
+	$desc = $this->types['parent'].' : '.$this->parent['lib'].' ('.$this->parent['num'].')';
+}
+if($this->types['parent']=="complement"
+	|| $this->types['parent']=="determinant"
+	|| $this->types['parent']=="DicoSyntagme"
+	|| $this->types['parent']=="pronom_complement"
+	|| $this->types['parent']=="pronom_sujet"
+	|| $this->types['parent']=="negation"
+	){
+	$urlR = $this->url(array('controller'=>'index', 'action'=>'modifier', 'type'=>'dico', 'id'=>$this->parent['id_dico']),"",true);
+	$urlR = '<a href="'.$urlR.'">Retour à la liste des '.$this->types['parent'].'s</a>';
+	$desc = $this->types['parent'].' : '.$this->parent['lib'].' ('.$this->parent['num'].')';
+}
+if($this->types['parent']=="concept"){
+	$urlR = $this->url(array('controller'=>'index', 'action'=>'modifier', 'type'=>'dico', 'id'=>$this->parent['id_dico']),"",true);
+	$urlR = '<a href="'.$urlR.'">Retour à la liste des '.$this->types['parent'].'s</a>';
+	$desc = $this->types['parent'].' : '.$this->parent['lib'].' ('.$this->parent['type'].')';
+}
+if($this->types['parent']=="adjectif"
+	|| $this->types['parent']=="verbe"
+	|| $this->types['parent']=="substantif"){
+	$urlR = $this->url(array('controller'=>'index', 'action'=>'modifier', 'type'=>'concept', 'id'=>$this->idParent),"",true);
+	$urlR = '<a href="'.$urlR.'">Retour à la liste des '.$this->types['parent'].'s</a>';
+	$desc = $this->types['parent'].' : '.$this->parent['prefix'];
+}
+if($this->types['parent']=="generateur"){
+	$urlR = $this->url(array('controller'=>'index', 'action'=>'modifier', 'type'=>'concept', 'id'=>$this->idParent),"",true);
+	$urlR = '<a href="'.$urlR.'">Retour à la liste des '.$this->types['parent'].'s</a>';
+	$desc = $this->types['parent'].' : '.$this->parent['valeur'];
+}
+if($this->types['parent']=="syntagme"){
+	$urlR = $this->url(array('controller'=>'index', 'action'=>'modifier', 'type'=>'concept', 'id'=>$this->idParent),"",true);
+	$urlR = '<a href="'.$urlR.'">Retour à la liste des '.$this->types['parent'].'s</a>';
+	$desc = $this->types['parent'].' : '.$this->parent['lib'];
+}
+?>
+		<p><?php echo $urlR;?></p>
+		<p><?php echo $desc;?></p>
+		<p><?php echo $form;?></p>
+        <?php echo $this->layout()->content; ?>
+    </div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<p><a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'index'));?>">Retour à la liste des dictionnaires</a></p>
+<p>Êtes-vous sûr de vouloir calculer la version XML du dictionnaire de <?php echo $this->dico['type']; ?> : <?php echo $this->dico['url_source']; ?> ?
+<br/>le temps de traitement peut être important.
+</p>
+<form action="<?php echo $this->url(array('action'=>'creerxml')); ?>" method="post">
+<div>
+    <input type="hidden" name="id" value="<?php echo $this->dico['id_dico']; ?>" />
+    <input type="submit" name="calculer" value="Oui" />
+    <input type="submit" name="calculer" value="Non" />
+</div>
+</form>

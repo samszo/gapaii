@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<descs>
+	<dicos>
+		<dico type="conjugaisons">
+			<traitements>
+				<action char="\r" type="explode" desc="récupére chaque modèle de conjugaison">
+					<action char="," type="explode" desc="récupére chaque instance de terminaison">
+						<action type="VerifFin" desc="vérifie la fin du modèle" >
+							<NoVerifAction deb="0" length="1" val="(" type="VerifSubstr" desc="vérifie la déterminaison de la conjugaison" >
+								<NoVerifAction type="SetTerminaison"  />
+								<action char="." type="SetConjugaison" />
+							</NoVerifAction>
+							<action char="." type="SetTerminaisonFin" />
+						</action>
+					</action>
+				</action>
+			</traitements>	
+		</dico>
+		<dico type="déterminants">
+			<traitements>
+				<action char="\r" type="explode" desc="récupére chaque modèle du déterminant">
+					<action char="," type="explode" desc="récupére chaque instance du modèle">
+						<action type="VerifFin" desc="vérifie la fin du modèle de déterminant" >
+							<NoVerifAction type="SetNoeud"  />
+							<action type="SetModele" />
+						</action>
+					</action>
+				</action>
+			</traitements>	
+		</dico>
+		<dico type="compléments">
+			<traitements>
+				<action char="\r" type="explode" desc="récupére chaque modèle de complément">
+					<action char="," type="explode" desc="récupére chaque instance du modèle">
+						<action type="VerifDeb" desc="vérifie le début du modèle de complément" >
+							<NoVerifAction type="SetNoeud"  />
+							<action type="SetModele" />
+						</action>
+					</action>
+				</action>
+			</traitements>	
+		</dico>
+		<dico type="syntagmes">
+			<traitements>
+				<action char="\r" type="explode" desc="récupére chaque modèle de syntagme">
+					<action char="," type="explode" desc="récupére chaque instance du syntagme">
+						<action type="VerifFin" desc="vérifie le début du modèle de syntagme" >
+							<NoVerifAction type="SetNoeud"  />
+							<action type="SetModele" />
+						</action>
+					</action>
+				</action>
+			</traitements>	
+		</dico>
+		<dico type="concepts">
+			<traitements>
+				<action char="\r\r" type="explode" desc="récupére chaque item du dictionnaire">
+					<action char="\r" type="explode" desc="récupére chaque lien de l'item">
+						<action type="VerifDeb" desc="vérifie le début de l'item" >
+							<NoVerifAction type="SetNoeud"  />
+							<action type="SetConcept" />
+						</action>
+					</action>
+				</action>
+			</traitements>	
+		</dico>
+		<dico type="pronoms_complement">
+			<traitements>
+				<action char="\r" type="explode" desc="récupére chaque modèle de pronom">
+					<action type="SetPronom" char="," attributs="num,lib,lib_eli"/>
+				</action>
+			</traitements>	
+		</dico>
+		<dico type="pronoms_sujet">
+			<traitements>
+				<action char="\r" type="explode" desc="récupére chaque modèle de pronom">
+					<action type="SetPronom" char="," attributs="num,lib,lib_eli"/>
+				</action>
+			</traitements>	
+		</dico>
+		<dico type="négations">
+			<traitements>
+				<action char="\r" type="explode" desc="récupére chaque modèle de négation">
+					<action type="SetNegation" char="," attributs="num,lib"/>
+				</action>
+			</traitements>	
+		</dico>
+	</dicos>
+	<moteur>
+		<traitements>
+			<action char="\r" type="explode" desc="récupére chaque modèle de conjugaison">
+				<action char="," type="explode" desc="récupére chaque instance de terminaison">
+					<action type="VerifFin" desc="vérifie la fin du modèle" >
+						<NoVerifAction deb="0" length="1" val="(" type="VerifSubstr" desc="vérifie la déterminaison de la conjugaison" >
+							<NoVerifAction type="SetTerminaison"  />
+							<action char="." type="SetConjugaison" />
+						</NoVerifAction>
+						<action char="." type="SetTerminaisonFin" />
+					</action>
+				</action>
+			</action>
+		</traitements>	
+	</moteur>
+	<positions type="verbe">
+Position 1 : type de négation
+Position 2 : temps verbal
+Position 3 : pronoms sujets définis
+Positions 4 ET 5 : pronoms compléments
+Position 6 : ordre des pronoms sujets
+Position 7 : pronoms indéfinis
+Position 8 : Place du sujet dans la chaîne grammaticale	
+	</positions>
+	<desc>
+		<car>=</car>
+		<lib>blocage de l'information</lib>
+	</desc>
+	<desc>
+		<car>[</car>
+		<lib>début d’une étiquette de classe</lib>
+	</desc>
+	<desc>
+		<car>]</car>
+		<lib>fin d’une étiquette de classe</lib>
+	</desc>
+	<desc>
+		<car>|</car>
+		<lib>séparateur de classe dépendante à l’intérieur d’une classe</lib>
+	</desc>
+	<desc>
+		<car>||</car>
+		<lib>séparateur entre la classe et la définition de l'accord</lib>
+	</desc>
+	<desc>
+		<car>#</car>
+		<lib>renvoie à la classe des données de type “#”</lib>
+	</desc>
+	<desc>
+		<car>$</car>
+		<lib>fin de descripteur de texte</lib>
+	</desc>
+	<desc>
+		<car />
+		<lib>Marqueurs paradigmatiques</lib>
+	</desc>
+	<desc>
+		<car>v_</car>
+		<lib>indicateur de la classe “verbes”</lib>
+	</desc>
+	<desc>
+		<car>a_</car>
+		<lib>indicateur de la classe “adjectifs”</lib>
+	</desc>
+	<desc>
+		<car>m_</car>
+		<lib>indicateur de la classe substantif</lib>
+	</desc>
+	<desc>
+		<car>s_</car>
+		<lib>indicateur de la classe “syntagme”</lib>
+	</desc>
+	<desc>
+		<car>di_</car>
+		<lib>indicateur de la classe “dictionnaire particulier”</lib>
+	</desc>
+	<desc>
+		<car>th_</car>
+		<lib>indicateur de la classe “thème spécifique”</lib>
+	</desc>
+	<desc>
+		<car>sy_</car>
+		<lib>indicateur de la classe “locution syntaxique”</lib>
+	</desc>
+	<desc>
+		<car>rc_</car>
+		<lib>indicateur de la classe “représentation des connaissances”</lib>
+	</desc>
+	<desc>
+		<car>l_</car>
+		<lib>indicateur de la classe “locution”</lib>
+	</desc>
+	<desc>
+		<car>@</car>
+		<lib>séparateur dans les adjectifs placés avant Marqueurs rhétoriques</lib>
+	</desc>
+	<desc>
+		<car>FF</car>
+		<lib>arrêt forcé de développement d’une chaîne de caractères</lib>
+	</desc>
+	<desc>
+		<car>*</car>
+		<lib>chaîne de caractère déplaçable</lib>
+	</desc>
+	<desc>
+		<car>,</car>
+		<lib>indique les places possibles d'une chaîne de caractère déplaçable</lib>
+	</desc>
+	<desc>
+		<car><![CDATA[<]]></car>
+		<lib>début de chaîne de caractères facultative</lib>
+	</desc>
+	<desc>
+		<car><![CDATA[>]]></car>
+		<lib>fin de chaîne de caractère facultative</lib>
+	</desc>
+	<desc>
+		<car />
+		<lib>Marqueurs de valeurs syntaxiques</lib>
+	</desc>
+	<desc>
+		<car>\</car>
+		<lib>marqueurs de verbes</lib>
+	</desc>
+	<desc>
+		<car>]]</car>
+		<lib>indique dans carac le choix d’un élément parmi une classe d’éléments</lib>
+	</desc>
+	<desc>
+		<car>)</car>
+		<lib>marqueurs de substantifs et adjectifs</lib>
+	</desc>
+	<desc>
+		<car>(</car>
+		<lib>marqueurs de substantifs</lib>
+	</desc>
+	<desc>
+		<car>%</car>
+		<lib>marqueurs de saut de ligne</lib>
+	</desc>
+	<desc>
+		<car>∏</car>
+		<lib>séparateur entre adjectifs</lib>
+	</desc>
+</descs>

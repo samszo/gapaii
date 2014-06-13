@@ -1,0 +1,45 @@
+<p><a href="<?php echo $this->url(array('controller'=>'index', 'type'=>'dico', 'action'=>'ajouter'));?>">Ajouter un nouveau dictionnaire</a></p>
+<table>
+    <tr>
+        <th>Id Dico</th>
+        <th>Nom</th>
+        <th>Dico XML</th>
+        <th>source</th>
+        <th>Type</th>
+        <th>Date</th>
+        <th>&nbsp;</th>
+    </tr>  
+<?php 
+	$table = new Model_DbTable_Dicos();
+	foreach($this->dicos as $dico) : ?>
+    <tr>
+        <td><?php echo $this->escape($dico->id_dico);?></td>
+        <td><?php echo $this->escape($dico->nom);?></td>
+        <td><?php 
+        	if($dico->url==""){
+        		echo '<a href="'.$this->url(array('controller'=>'index','action'=>'creerxml', 'id'=>$dico->id_dico)).'">Calculer</a>';
+        	}else{
+        		echo '<a href="'.$this->escape($dico->url).'">'.$this->escape($dico->url).'</a>';
+        	}?></td>
+        <td><a href="<?php echo $this->escape($dico->url_source);?>"><?php echo $this->escape($dico->url_source);?></a></td>
+        <td><?php echo $this->escape($dico->type);//utf8_encode pour php 5.3?></td>
+        <td><?php echo $this->escape($dico->maj);?></td>
+        <td><?php
+			if($dico->url==""){
+	            echo '';
+			}else{
+	        	//vérifie si les enfants du dico on été calculé
+				$items = $table->getItemsDico($dico->id_dico);
+				if($items->count()>0){
+		            echo '<a href="'.$this->url(array('controller'=>'index', 'action'=>'modifier', 'type'=>'dico', 'id'=>$dico->id_dico)).'">Modifier</a>';
+	            }else{
+		            echo '<a href="'.$this->url(array('controller'=>'index', 'action'=>'sauvegarder', 'id'=>$dico->id_dico)).'">Ajouter à la BDD</a>';
+	            }
+			}
+            ?>
+            <a href="<?php echo $this->url(array('controller'=>'index',
+                'action'=>'supprimer', 'type'=>'dico', 'id'=>$dico->id_dico));?>">Supprimer</a>
+        </td>
+    </tr>
+<?php endforeach; ?>
+</table>

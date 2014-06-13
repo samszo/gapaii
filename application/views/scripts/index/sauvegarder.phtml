@@ -1,0 +1,36 @@
+<p><a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'index'));?>">Retour à la liste des dictionnaires</a></p>
+<p>Êtes-vous sûr de vouloir sauvegarder dans la BDD la version XML du dictionnaire de <?php echo $this->dico['type']; ?> : <a href="<?php echo $this->dico['url']; ?>"><?php echo $this->dico['url']; ?></a> ?
+<br/>le temps de traitement peut être important.
+</p>
+<form action="<?php echo $this->url(array('action'=>'sauvegarder')); ?>" method="post">
+<div>
+    <input type="hidden" name="id" value="<?php echo $this->dico['id_dico']; ?>" />
+    <input type="submit" name="sauvegarder" value="Oui" />
+    <input type="submit" name="sauvegarder" value="Non" />
+    <p>Choisissez le dico à compléter avec les données importées :    
+<?php
+    $dbDicoMerge = new Model_DbTable_Dicos();
+	$arrDicosMerge = $dbDicoMerge->obtenirDicoType($this->dico['type']);
+	echo "<SELECT name='idDicoMerge'>";
+	echo "<OPTION value='-1' selected >AUCUN</OPTION>";
+	foreach($arrDicosMerge as $d){
+		if($d['id_dico']!=$this->dico['id_dico']){
+			echo "<OPTION value='".$d['id_dico']."' >".$d['nom']." - ".$d['maj']."</OPTION>";
+		}			
+	}
+	echo "</SELECT></p>";	
+
+	if($this->dico['type']=="concepts"){
+		//choix des dictionnaires de référence
+		echo "<p>Choisissez le dictionnaire de référence pour les conjugaisons : ";
+		$dbDico = new Model_DbTable_Dicos();
+		$arrDicos = $dbDico->obtenirDicoType("conjugaisons");
+		echo "<SELECT name='idDicoConj'>";
+		foreach($arrDicos as $d){
+			echo "<OPTION value='".$d['id_dico']."' >".$d['nom']." - ".$d['maj']."</OPTION>";			
+		}
+		echo "</SELECT></p>";	
+	}	
+?>
+</div>
+</form>
